@@ -1,5 +1,10 @@
+
 pipeline {
     agent any
+
+    triggers {
+        pollSCM('H/2 * * * *')
+    }
 
     stages {
 
@@ -21,6 +26,7 @@ pipeline {
                     docker rm -f my-python-app || true
 
                     docker run -d \
+                    --restart unless-stopped \
                     --name my-python-app \
                     -p 8081:5000 \
                     my-python-app:${BUILD_NUMBER}
